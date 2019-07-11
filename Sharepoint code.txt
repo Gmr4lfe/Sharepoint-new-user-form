@@ -1,0 +1,898 @@
+<%@ Page language="C#" MasterPageFile="~masterurl/default.master"    Inherits="Microsoft.SharePoint.WebPartPages.WebPartPage,Microsoft.SharePoint,Version=14.0.0.0,Culture=neutral,PublicKeyToken=71e9bce111e9429c" meta:webpartpageexpansion="full" meta:progid="SharePoint.WebPartPage.Document"  %>
+<%@ Register Tagprefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %> <%@ Register Tagprefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %> <%@ Import Namespace="Microsoft.SharePoint" %> <%@ Assembly Name="Microsoft.Web.CommandUI, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %> <%@ Register Tagprefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
+<asp:Content ContentPlaceHolderId="PlaceHolderPageTitle" runat="server">
+	<SharePoint:ListFormPageTitle runat="server"/>
+</asp:Content>
+<asp:Content ContentPlaceHolderId="PlaceHolderPageTitleInTitleArea" runat="server">
+	<span class="die">
+	<SharePoint:ListProperty Property="LinkTitle" runat="server" id="ID_LinkTitle"/>
+	: </span>
+	<SharePoint:ListItemProperty id="ID_ItemProperty" maxlength="40" runat="server"/>
+</asp:Content>
+<asp:Content ContentPlaceHolderId="PlaceHolderPageImage" runat="server">
+	<img src="/_layouts/images/blank.gif" width='1' height='1' alt="" />
+</asp:Content>
+<asp:Content ContentPlaceHolderId="PlaceHolderLeftNavBar" runat="server" >
+<SharePoint:UIVersionedContent UIVersion="4" runat="server">
+	<ContentTemplate>
+				<div class="ms-quicklaunchouter">
+				<div class="ms-quickLaunch">
+				<Sharepoint:UIVersionedContent runat="server" UIVersion="4">
+					<ContentTemplate>
+						<h2 style="display:inline;" class="ms-hidden"><SharePoint:EncodedLiteral runat="server" text="<%$Resources:wss,quiklnch_pagetitle%>" EncodeMethod="HtmlEncode"/></h2>
+					</ContentTemplate>
+				</SharePoint:UIVersionedContent>
+				<SharePoint:UIVersionedContent UIVersion="3" runat="server">
+					<ContentTemplate>
+						<h3 class="ms-standardheader"><label class="ms-hidden"><SharePoint:EncodedLiteral runat="server" text="<%$Resources:wss,quiklnch_pagetitle%>" EncodeMethod="HtmlEncode"/></label>
+						<Sharepoint:SPSecurityTrimmedControl runat="server" PermissionsString="ViewFormPages">
+							<div class="ms-quicklaunchheader"><SharePoint:SPLinkButton id="idNavLinkViewAll" runat="server" NavigateUrl="~site/_layouts/viewlsts.aspx" Text="<%$Resources:wss,quiklnch_allcontent%>" accesskey="<%$Resources:wss,quiklnch_allcontent_AK%>"/></div>
+						</SharePoint:SPSecurityTrimmedControl>
+						</h3>
+					</ContentTemplate>
+				</SharePoint:UIVersionedContent>
+				<Sharepoint:SPNavigationManager
+				id="QuickLaunchNavigationManager"
+				runat="server"
+				QuickLaunchControlId="QuickLaunchMenu"
+				ContainedControl="QuickLaunch"
+				EnableViewState="false"
+				CssClass="ms-quicklaunch-navmgr"
+				>
+				<div>
+					<SharePoint:DelegateControl runat="server" ControlId="QuickLaunchDataSource">
+						<Template_Controls>
+						<asp:SiteMapDataSource SiteMapProvider="SPNavigationProvider" ShowStartingNode="False" id="QuickLaunchSiteMap" StartingNodeUrl="sid:1025" runat="server" />
+					 </Template_Controls>
+					</SharePoint:DelegateControl>
+					<SharePoint:UIVersionedContent UIVersion="3" runat="server">
+						<ContentTemplate>
+							<SharePoint:AspMenu id="QuickLaunchMenu" runat="server" DataSourceId="QuickLaunchSiteMap" Orientation="Vertical" StaticDisplayLevels="2" ItemWrap="true" MaximumDynamicDisplayLevels="0" StaticSubMenuIndent="0" SkipLinkText="" CssClass="s4-die">
+								<LevelMenuItemStyles>
+									<asp:menuitemstyle CssClass="ms-navheader" />
+									<asp:menuitemstyle CssClass="ms-navitem" />
+								</LevelMenuItemStyles>
+								<LevelSubMenuStyles>
+									<asp:submenustyle CssClass="ms-navSubMenu1" />
+									<asp:submenustyle CssClass="ms-navSubMenu2" />
+								</LevelSubMenuStyles>
+								<LevelSelectedStyles>
+									<asp:menuitemstyle CssClass="ms-selectednavheader" />
+									<asp:menuitemstyle CssClass="ms-selectednav" />
+								</LevelSelectedStyles>
+							</SharePoint:AspMenu>
+						</ContentTemplate>
+					</SharePoint:UIVersionedContent>
+					<SharePoint:UIVersionedContent UIVersion="4" runat="server">
+						<ContentTemplate>
+							<SharePoint:AspMenu id="V4QuickLaunchMenu" runat="server" EnableViewState="false" DataSourceId="QuickLaunchSiteMap" UseSimpleRendering="true" Orientation="Vertical" StaticDisplayLevels="2" MaximumDynamicDisplayLevels="0" SkipLinkText="" CssClass="s4-ql" />
+						</ContentTemplate>
+					</SharePoint:UIVersionedContent>
+				</div>
+				</Sharepoint:SPNavigationManager>
+			<Sharepoint:UIVersionedContent runat="server" UIVersion="3">
+				<ContentTemplate>
+					<Sharepoint:SPNavigationManager
+					id="TreeViewNavigationManager"
+					runat="server"
+					ContainedControl="TreeView"
+					>
+					  <table class="ms-navSubMenu1" cellpadding="0" cellspacing="0" border="0">
+						<tr>
+						  <td>
+							<table class="ms-navheader" width="100%" cellpadding="0" cellspacing="0" border="0">
+							  <tr>
+								<td nowrap="nowrap" id="idSiteHierarchy">
+								  <SharePoint:SPLinkButton runat="server" NavigateUrl="~site/_layouts/viewlsts.aspx" id="idNavLinkSiteHierarchy" Text="<%$Resources:wss,treeview_header%>" accesskey="<%$Resources:wss,quiklnch_allcontent_AK%>"/>
+								</td>
+							  </tr>
+							</table>
+						  </td>
+						</tr>
+					  </table>
+					  <div class="ms-treeviewouter">
+						<SharePoint:DelegateControl runat="server" ControlId="TreeViewAndDataSource">
+						  <Template_Controls>
+							<SharePoint:SPHierarchyDataSourceControl
+							 runat="server"
+							 id="TreeViewDataSource"
+							 RootContextObject="Web"
+							 IncludeDiscussionFolders="true"
+							/>
+							<SharePoint:SPRememberScroll runat="server" id="TreeViewRememberScroll" onscroll="javascript:_spRecordScrollPositions(this);" style="overflow: auto;height: 400px;width: 150px; ">
+							  <Sharepoint:SPTreeView
+								id="WebTreeView"
+								runat="server"
+								ShowLines="false"
+								DataSourceId="TreeViewDataSource"
+								ExpandDepth="0"
+								SelectedNodeStyle-CssClass="ms-tvselected"
+								NodeStyle-CssClass="ms-navitem"
+								NodeStyle-HorizontalPadding="2"
+								SkipLinkText=""
+								NodeIndent="12"
+								ExpandImageUrl="/_layouts/images/tvplus.gif"
+								CollapseImageUrl="/_layouts/images/tvminus.gif"
+								NoExpandImageUrl="/_layouts/images/tvblank.gif"
+							  >
+							  </Sharepoint:SPTreeView>
+							</Sharepoint:SPRememberScroll>
+						  </Template_Controls>
+						</SharePoint:DelegateControl>
+					  </div>
+					</Sharepoint:SPNavigationManager>
+				</ContentTemplate>
+			</SharePoint:UIVersionedContent>
+			<Sharepoint:UIVersionedContent runat="server" UIVersion="4">
+				<ContentTemplate>
+					<Sharepoint:SPNavigationManager
+					id="TreeViewNavigationManagerV4"
+					runat="server"
+					ContainedControl="TreeView"
+					CssClass="s4-treeView"
+					>
+					  <SharePoint:SPLinkButton runat="server" NavigateUrl="~site/_layouts/viewlsts.aspx" id="idNavLinkSiteHierarchyV4" Text="<%$Resources:wss,treeview_header%>" accesskey="<%$Resources:wss,quiklnch_allcontent_AK%>" CssClass="s4-qlheader" />
+						  <div class="ms-treeviewouter">
+							<SharePoint:DelegateControl runat="server" ControlId="TreeViewAndDataSource">
+							  <Template_Controls>
+								<SharePoint:SPHierarchyDataSourceControl
+								 runat="server"
+								 id="TreeViewDataSourceV4"
+								 RootContextObject="Web"
+								 IncludeDiscussionFolders="true"
+								/>
+								<SharePoint:SPRememberScroll runat="server" id="TreeViewRememberScrollV4" onscroll="javascript:_spRecordScrollPositions(this);" style="overflow: auto;height: 400px;width: 155px; ">
+								  <Sharepoint:SPTreeView
+									id="WebTreeViewV4"
+									runat="server"
+									ShowLines="false"
+									DataSourceId="TreeViewDataSourceV4"
+									ExpandDepth="0"
+									SelectedNodeStyle-CssClass="ms-tvselected"
+									NodeStyle-CssClass="ms-navitem"
+									SkipLinkText=""
+									NodeIndent="12"
+									ExpandImageUrl="/_layouts/images/tvclosed.png"
+									ExpandImageUrlRtl="/_layouts/images/tvclosedrtl.png"
+									CollapseImageUrl="/_layouts/images/tvopen.png"
+									CollapseImageUrlRtl="/_layouts/images/tvopenrtl.png"
+									NoExpandImageUrl="/_layouts/images/tvblank.gif"
+								  >
+								  </Sharepoint:SPTreeView>
+								</Sharepoint:SPRememberScroll>
+							  </Template_Controls>
+							</SharePoint:DelegateControl>
+						  </div>
+					</Sharepoint:SPNavigationManager>
+				</ContentTemplate>
+			</SharePoint:UIVersionedContent>
+				<SharePoint:UIVersionedContent UIVersion="3" runat="server" id="PlaceHolderQuickLaunchBottomV3">
+					<ContentTemplate>
+						<table width="100%" cellpadding="0" cellspacing="0" border="0" class="s4-die">
+						<tbody>
+						<tr><td>
+						<table class="ms-recyclebin" width="100%" cellpadding="0" cellspacing="0" border="0">
+						<tbody>
+						<tr><td nowrap="nowrap">
+						<SharePoint:SPLinkButton runat="server" NavigateUrl="~site/_layouts/recyclebin.aspx" id="v3idNavLinkRecycleBin" ImageUrl="/_layouts/images/recycbin.gif" Text="<%$Resources:wss,StsDefault_RecycleBin%>" PermissionsString="DeleteListItems" />
+						</td></tr>
+						</table>
+						</td></tr>
+						</table>
+					</ContentTemplate>
+				</SharePoint:UIVersionedContent>
+				<SharePoint:UIVersionedContent UIVersion="4" runat="server" id="PlaceHolderQuickLaunchBottomV4">
+					<ContentTemplate>
+						<ul class="s4-specialNavLinkList">
+							<li>
+								<SharePoint:ClusteredSPLinkButton
+									runat="server"
+									NavigateUrl="~site/_layouts/recyclebin.aspx"
+									ImageClass="s4-specialNavIcon"
+									ImageUrl="/_layouts/images/fgimg.png"
+									ImageWidth=16
+									ImageHeight=16
+									OffsetX=0
+									OffsetY=428
+									id="idNavLinkRecycleBin"
+									Text="<%$Resources:wss,StsDefault_RecycleBin%>"
+									CssClass="s4-rcycl"
+									PermissionsString="DeleteListItems" />
+							</li>
+							<li>
+								<SharePoint:ClusteredSPLinkButton
+									id="idNavLinkViewAllV4"
+									runat="server"
+									PermissionsString="ViewFormPages"
+									NavigateUrl="~site/_layouts/viewlsts.aspx"
+									ImageClass="s4-specialNavIcon"
+									ImageUrl="/_layouts/images/fgimg.png"
+									ImageWidth=16
+									ImageHeight=16
+									OffsetX=0
+									OffsetY=0
+									Text="<%$Resources:wss,quiklnch_allcontent_short%>"
+									accesskey="<%$Resources:wss,quiklnch_allcontent_AK%>"/>
+							</li>
+						</ul>
+					</ContentTemplate>
+				</SharePoint:UIVersionedContent>
+				</div>
+				</div>
+	</ContentTemplate>
+</SharePoint:UIVersionedContent>
+</asp:Content>
+<asp:Content ContentPlaceHolderId="PlaceHolderMain" runat="server">
+<SharePoint:UIVersionedContent UIVersion="4" runat="server">
+	<ContentTemplate>
+	<div style="padding-left:5px">
+	</ContentTemplate>
+</SharePoint:UIVersionedContent>
+	<table cellpadding="0" cellspacing="0" id="onetIDListForm" style="width:100%">
+	 <tr>
+	  <td>
+	 <WebPartPages:WebPartZone runat="server" FrameType="None" ID="Main" Title="loc:Main"><ZoneTemplate>
+<WebPartPages:ContentEditorWebPart runat="server" __MarkupType="xmlmarkup" WebPart="true" __WebPartId="{F64CCE29-A54B-4D27-AD54-1C10D88731B0}" >
+<WebPart xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/WebPart/v2">
+  <Title>Content Editor</Title>
+  <FrameType>Default</FrameType>
+  <Description>Allows authors to enter rich text content.</Description>
+  <IsIncluded>true</IsIncluded>
+  <PartOrder>2</PartOrder>
+  <FrameState>Normal</FrameState>
+  <Height />
+  <Width />
+  <AllowRemove>true</AllowRemove>
+  <AllowZoneChange>true</AllowZoneChange>
+  <AllowMinimize>true</AllowMinimize>
+  <AllowConnect>true</AllowConnect>
+  <AllowEdit>true</AllowEdit>
+  <AllowHide>true</AllowHide>
+  <IsVisible>true</IsVisible>
+  <DetailLink />
+  <HelpLink />
+  <HelpMode>Modeless</HelpMode>
+  <Dir>Default</Dir>
+  <PartImageSmall />
+  <MissingAssembly>Cannot import this Web Part.</MissingAssembly>
+  <PartImageLarge>/_layouts/images/mscontl.gif</PartImageLarge>
+  <IsIncludedFilter />
+  <ExportControlledProperties>true</ExportControlledProperties>
+  <ConnectionID>00000000-0000-0000-0000-000000000000</ConnectionID>
+  <ID>g_f64cce29_a54b_4d27_ad54_1c10d88731b0</ID>
+  <ContentLink xmlns="http://schemas.microsoft.com/WebPart/v2/ContentEditor" />
+  <Content xmlns="http://schemas.microsoft.com/WebPart/v2/ContentEditor"><![CDATA[<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+        //Hides Field on load
+        $("nobr:contains('Temp. Employee End Date')").parent('h3').parent('td').parent('tr').hide();
+        $("nobr:contains('Software Access Request')").parent('h3').parent('td').parent('tr').hide();
+        $("nobr:contains('User of the existing Computer')").parent('h3').parent('td').parent('tr').hide();
+        $("nobr:contains('Computer Hardware')").parent('h3').parent('td').parent('tr').hide();
+        $("nobr:contains('Cell Provider')").parent('h3').parent('td').parent('tr').hide();
+
+        //Get the checkbox value weather checked or not
+        $("input[title$='Temp. Employee']").click(function()
+        {
+            if (this.checked)
+            {
+                $("nobr:contains('Temp. Employee End Date')").parent('h3').parent('td').parent('tr').show();
+            }
+            else
+            {
+                $("nobr:contains('Temp. Employee End Date')").parent('h3').parent('td').parent('tr').hide();
+            }
+        });
+
+        $("input[title$='Does the User need access Software?']").click(function()
+        {
+            if (this.checked)
+            {
+                $("nobr:contains('Software Access Request')").parent('h3').parent('td').parent('tr').show();
+            }
+            else
+            {
+                $("nobr:contains('Software Access Request')").parent('h3').parent('td').parent('tr').hide();
+            }
+        });
+    
+        $("input[title$='Will the user be using an existing computer?']").click(function()
+        {
+            //If checkbox is checked then hide the fields
+            if (this.checked)
+            {
+                //alert('inside show for offered');
+                $("nobr:contains('User of the existing Computer')").parent('h3').parent('td').parent('tr').show();
+            }
+            else
+            {
+                //alert('inside hide for offered');
+                $("nobr:contains('User of the existing Computer')").parent('h3').parent('td').parent('tr').hide();
+            }
+        });
+    
+        $("input[title$='Does the Employee Need A Computer?']").click(function()
+        {
+            if (this.checked)
+            {
+                $("nobr:contains('Computer Hardware')").parent('h3').parent('td').parent('tr').show();
+            }
+            else
+            {
+                $("nobr:contains('Computer Hardware')").parent('h3').parent('td').parent('tr').hide();
+            }
+        });
+
+        $("input[title$='Does This User Need New Cell-Phone']").click(function()
+        {
+            if (this.checked)
+            {
+                $("nobr:contains('Cell Provider')").parent('h3').parent('td').parent('tr').show();
+            }
+            else
+            {
+                $("nobr:contains('Cell Provider')").parent('h3').parent('td').parent('tr').hide();
+            }
+        });
+
+    });
+
+</script>​]]></Content>
+  <PartStorage xmlns="http://schemas.microsoft.com/WebPart/v2/ContentEditor" />
+</WebPart>
+</WebPartPages:ContentEditorWebPart>
+<WebPartPages:DataFormWebPart runat="server" Description="" PartOrder="4" Default="FALSE" HelpLink="" AllowRemove="True" IsVisible="True" AllowHide="True" UseSQLDataSourcePaging="True" ExportControlledProperties="True" IsIncludedFilter="" DataSourceID="" Title="SNURF" ViewFlag="1048584" NoDefaultStyle="TRUE" AllowConnect="True" DisplayName="SNURF" PageType="PAGE_NEWFORM" FrameState="Normal" PageSize="-1" PartImageLarge="" AsyncRefresh="False" ExportMode="All" Dir="Default" DetailLink="" ShowWithSampleData="False" ListId="36f78dfe-5990-408d-af58-06569fa56c08" ListName="{36F78DFE-5990-408D-AF58-06569FA56C08}" FrameType="None" PartImageSmall="" IsIncluded="True" SuppressWebPartChrome="False" AllowEdit="True" EnableOriginalValue="False" ChromeType="None" AutoRefresh="False" AutoRefreshInterval="60" AllowMinimize="True" ViewContentTypeId="" InitialAsyncDataFetch="False" MissingAssembly="Cannot import this Web Part." HelpMode="Modeless" ID="g_b07341ef_a9da_4f3b_9102_c2eaf3482b32" ConnectionID="00000000-0000-0000-0000-000000000000" AllowZoneChange="True" ManualRefresh="False" __MarkupType="vsattributemarkup" __WebPartId="{B07341EF-A9DA-4F3B-9102-C2EAF3482B32}" __AllowXSLTEditing="true" WebPart="true" Height="" Width=""><ParameterBindings>
+		 <ParameterBinding Name="ListItemId" Location="QueryString(ID)" DefaultValue="0"/>
+		 <ParameterBinding Name="weburl" Location="None" DefaultValue="http://my.rockwaterenergy.com/teamsites/it"/>
+		 <ParameterBinding Name="ListID" Location="None" DefaultValue="{36F78DFE-5990-408D-AF58-06569FA56C08}"/>
+		 <ParameterBinding Name="dvt_apos" Location="Postback;Connection"/>
+		 <ParameterBinding Name="ManualRefresh" Location="WPProperty[ManualRefresh]"/>
+		 <ParameterBinding Name="UserID" Location="CAMLVariable" DefaultValue="CurrentUserName"/>
+		 <ParameterBinding Name="Today" Location="CAMLVariable" DefaultValue="CurrentDate"/>
+	 </ParameterBindings>
+<DataFields>
+
+@Title,New Hire Name;@Title0,Job Title;@Manager,Manager;@Region,Region;@Business_x0020_Unit,Business Unit;@Department,Department;@Location,Location;@Date_x0020_Needed,Date Needed;@Employee_x0020_ID_x0023_,Employee ID#;@Temp_x002e__x0020_Employee,Temp. Employee;@Temp_x002e__x0020_Employee_x0020,Temp. Employee End Date;@Does_x0020_This_x0020_User_x0020,Does This User Need New Cell-Phone;@Cell_x0020_Provider,Cell Provider;@Existing_x0020_Personal_x0020_Nu,Existing Personal Number;@Number_x0020_Transfer_x0020_from,Number Transfer from Employee;@New_x0020_Cell_x0020_Device,New Cell Device;@Does_x0020_the_x0020_Employee_x0,Does the Employee Need A Computer?;@Computer_x0020_Hardware,Computer Hardware;@Will_x0020_the_x0020_user_x0020_,Will the user be using an existing computer?;@User_x0020_of_x0020_the_x0020_ex,User of the existing Computer;@Does_x0020_the_x0020_User_x0020_,Does the User need access Software?;@Software_x0020_Access_x0020_Requ,Software Access Request;@Network_x0020_Folder_x0020_Acces,Network Folder Access;@HRIS,HRIS;@HRIS_x0020_Locations_x0020_Neede,HRIS Locations Needed;@HRIS_x0020_Justification,HRIS Justification;@HRIS_x0020_Roles,HRIS Roles;@Badges,Badges;@Badge_x0020_Access_x0020_Rights,Badge Access Rights;@Comments,Comments;@Completed_x0020_By,Completed By;@Region_x002f_Corporate_x0020_Man,Region/Corporate Manager;@Region_x0020_VP_x002f_Corporate,Region VP/Corporate;@ID,ID;@ContentType,Content Type;@Modified,Modified;@Created,Created;@Author,Created By;@Editor,Modified By;@_UIVersionString,Version;@Attachments,Attachments;@File_x0020_Type,File Type;@FileLeafRef,Name (for use in forms);@FileDirRef,Path;@FSObjType,Item Type;@_HasCopyDestinations,Has Copy Destinations;@_CopySource,Copy Source;@ContentTypeId,Content Type ID;@_ModerationStatus,Approval Status;@_UIVersion,UI Version;@Created_x0020_Date,Created;@FileRef,URL Path;@ItemChildCount,Item Child Count;@FolderChildCount,Folder Child Count;</DataFields>
+<Xsl>
+
+
+
+
+
+
+<xsl:stylesheet xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:dsp="http://schemas.microsoft.com/sharepoint/dsp" version="1.0" exclude-result-prefixes="xsl msxsl ddwrt" xmlns:ddwrt="http://schemas.microsoft.com/WebParts/v2/DataView/runtime" xmlns:asp="http://schemas.microsoft.com/ASPNET/20" xmlns:__designer="http://schemas.microsoft.com/WebParts/v2/DataView/designer" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:SharePoint="Microsoft.SharePoint.WebControls" xmlns:ddwrt2="urn:frontpage:internal">
+	<xsl:output method="html" indent="no"/>
+	<xsl:decimal-format NaN=""/>
+	<xsl:param name="dvt_apos">&apos;</xsl:param>
+	<xsl:param name="ManualRefresh"></xsl:param>
+	<xsl:variable name="dvt_1_automode">0</xsl:variable>
+	<xsl:template match="/" xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:dsp="http://schemas.microsoft.com/sharepoint/dsp" xmlns:asp="http://schemas.microsoft.com/ASPNET/20" xmlns:__designer="http://schemas.microsoft.com/WebParts/v2/DataView/designer" xmlns:SharePoint="Microsoft.SharePoint.WebControls">
+		<xsl:choose>
+			<xsl:when test="($ManualRefresh = 'True')">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td valign="top">
+							<xsl:call-template name="dvt_1"/>
+						</td>
+						<td width="1%" class="ms-vb" valign="top">
+							<img src="/_layouts/images/staticrefresh.gif" id="ManualRefresh" border="0" onclick="javascript: {ddwrt:GenFireServerEvent('__cancel')}" alt="Click here to refresh the dataview."/>
+						</td>
+					</tr>
+				</table>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="dvt_1"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template name="dvt_1">
+		<xsl:variable name="dvt_StyleName">ListForm</xsl:variable>
+		<xsl:variable name="Rows" select="/dsQueryResponse/Rows/Row"/>
+		<div>
+			<span id="part1">
+				<table border="0" width="100%">
+					<xsl:call-template name="dvt_1.body">
+						<xsl:with-param name="Rows" select="$Rows"/>
+					</xsl:call-template>
+				</table>
+			</span>
+			<SharePoint:AttachmentUpload runat="server" ControlMode="New"/>
+			<SharePoint:ItemHiddenVersion runat="server" ControlMode="New"/>
+		</div>
+	</xsl:template>
+	<xsl:template name="dvt_1.body">
+		<xsl:param name="Rows"/>
+		<tr>
+			<td class="ms-toolbar" nowrap="nowrap">
+				<table>
+					<tr>
+						<td class="ms-toolbar" nowrap="nowrap" style="width: 93%"><IMG SRC="/_layouts/images/blank.gif" width="1" height="18"/><img src="../../SiteAssets/Select.png" width="407" height="129" /><img src="../../SiteAssets/rockwater.jpg" width="442" height="120" style="margin-left: 0px" /></td>
+						<td class="ms-toolbar" nowrap="nowrap">
+							<SharePoint:SaveButton runat="server" ControlMode="New" id="savebutton1"/>
+						</td>
+						<td class="ms-separator">
+							<xsl:text xmlns:ddwrt="http://schemas.microsoft.com/WebParts/v2/DataView/runtime" ddwrt:nbsp-preserve="yes" disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+						</td>
+						<td class="ms-toolbar" nowrap="nowrap" align="right">
+							<SharePoint:GoBackButton runat="server" ControlMode="New" id="gobackbutton1"/>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="ms-toolbar" nowrap="nowrap">
+				<SharePoint:FormToolBar runat="server" ControlMode="New"/>
+			</td>
+		</tr>
+		<xsl:call-template name="dvt_1.rowedit"/>
+		<tr>
+			<td class="ms-toolbar" nowrap="nowrap">
+				<table>
+					<tr>
+						<td width="99%" class="ms-toolbar" nowrap="nowrap"><IMG SRC="/_layouts/images/blank.gif" width="1" height="18"/></td>
+						<td class="ms-toolbar" nowrap="nowrap">
+							<SharePoint:SaveButton runat="server" ControlMode="New" id="savebutton2"/>
+						</td>
+						<td class="ms-separator">
+							<xsl:text xmlns:ddwrt="http://schemas.microsoft.com/WebParts/v2/DataView/runtime" ddwrt:nbsp-preserve="yes" disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+						</td>
+						<td class="ms-toolbar" nowrap="nowrap" align="right">
+							<SharePoint:GoBackButton runat="server" ControlMode="New" id="gobackbutton2"/>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</xsl:template>
+	<xsl:template name="dvt_1.rowedit">
+		<xsl:param name="Pos" select="position()"/>
+		<tr>
+			<td>
+				<table border="0" cellspacing="0" width="100%">
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader">
+								<nobr><span style="font-size: medium"><strong>New Hire Name</strong></span><span class="ms-formvalidation" style="font-size: medium"><strong> *</strong></span></nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff1{$Pos}" ControlMode="New" FieldName="Title" __designer:bind="{ddwrt:DataBind('i',concat('ff1',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Title')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff1description{$Pos}" FieldName="Title" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader">
+								<nobr><span style="font-size: medium"><strong>Title</strong></span><span class="ms-formvalidation" style="font-size: medium"> *</span></nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff2{$Pos}" ControlMode="New" FieldName="Title0" __designer:bind="{ddwrt:DataBind('i',concat('ff2',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Title0')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff2description{$Pos}" FieldName="Title0" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader">
+								<nobr><span style="font-size: medium"><strong>Manager</strong></span><span class="ms-formvalidation" style="font-size: medium"> *</span></nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff3{$Pos}" ControlMode="New" FieldName="Manager" __designer:bind="{ddwrt:DataBind('i',concat('ff3',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Manager')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff3description{$Pos}" FieldName="Manager" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader">
+								<nobr><span style="font-size: medium"><strong>Region</strong></span><span class="ms-formvalidation" style="font-size: medium"> *</span></nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff4{$Pos}" ControlMode="New" FieldName="Region" __designer:bind="{ddwrt:DataBind('i',concat('ff4',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Region')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff4description{$Pos}" FieldName="Region" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Business Unit</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff5{$Pos}" ControlMode="New" FieldName="Business_x0020_Unit" __designer:bind="{ddwrt:DataBind('i',concat('ff5',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Business_x0020_Unit')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff5description{$Pos}" FieldName="Business_x0020_Unit" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Department</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff6{$Pos}" ControlMode="New" FieldName="Department" __designer:bind="{ddwrt:DataBind('i',concat('ff6',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Department')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff6description{$Pos}" FieldName="Department" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Location</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff7{$Pos}" ControlMode="New" FieldName="Location" __designer:bind="{ddwrt:DataBind('i',concat('ff7',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Location')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff7description{$Pos}" FieldName="Location" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader">
+								<nobr><span style="font-size: medium"><strong>Date Needed</strong></span><span class="ms-formvalidation" style="font-size: medium"><strong> *</strong></span></nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff8{$Pos}" ControlMode="New" FieldName="Date_x0020_Needed" __designer:bind="{ddwrt:DataBind('i',concat('ff8',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Date_x0020_Needed')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff8description{$Pos}" FieldName="Date_x0020_Needed" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader">
+								<nobr><span style="font-size: medium"><strong>Employee ID#</strong></span><span class="ms-formvalidation" style="font-size: medium"><strong> *</strong></span></nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff9{$Pos}" ControlMode="New" FieldName="Employee_x0020_ID_x0023_" __designer:bind="{ddwrt:DataBind('i',concat('ff9',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Employee_x0020_ID_x0023_')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff9description{$Pos}" FieldName="Employee_x0020_ID_x0023_" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Temp. Employee</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff10{$Pos}" ControlMode="New" FieldName="Temp_x002e__x0020_Employee" __designer:bind="{ddwrt:DataBind('i',concat('ff10',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Temp_x002e__x0020_Employee')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff10description{$Pos}" FieldName="Temp_x002e__x0020_Employee" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Temp. Employee End Date</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody"><SharePoint:FormField runat="server" id="ff11{$Pos}" ControlMode="New" FieldName="Temp_x002e__x0020_Employee_x0020" __designer:bind="{ddwrt:DataBind('i',concat('ff11',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Temp_x002e__x0020_Employee_x0020')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff11description{$Pos}" FieldName="Temp_x002e__x0020_Employee_x0020" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Does This User Need New Cell-Phone</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff12{$Pos}" ControlMode="New" FieldName="Does_x0020_This_x0020_User_x0020" __designer:bind="{ddwrt:DataBind('i',concat('ff12',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Does_x0020_This_x0020_User_x0020')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff12description{$Pos}" FieldName="Does_x0020_This_x0020_User_x0020" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="width: 44px">
+							<H3 class="ms-standardheader" style="font-size: medium">
+								<nobr><strong>Cell Provider</strong></nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff13{$Pos}" ControlMode="New" FieldName="Cell_x0020_Provider" __designer:bind="{ddwrt:DataBind('i',concat('ff13',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Cell_x0020_Provider')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff13description{$Pos}" FieldName="Cell_x0020_Provider" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="width: 44px">
+							<H3 class="ms-standardheader" style="font-size: medium">
+								<nobr><strong>Existing Personal Number</strong></nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff14{$Pos}" ControlMode="New" FieldName="Existing_x0020_Personal_x0020_Nu" __designer:bind="{ddwrt:DataBind('i',concat('ff14',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Existing_x0020_Personal_x0020_Nu')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff14description{$Pos}" FieldName="Existing_x0020_Personal_x0020_Nu" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Number Transfer from Employee</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff15{$Pos}" ControlMode="New" FieldName="Number_x0020_Transfer_x0020_from" __designer:bind="{ddwrt:DataBind('i',concat('ff15',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Number_x0020_Transfer_x0020_from')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff15description{$Pos}" FieldName="Number_x0020_Transfer_x0020_from" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>New Cell Device</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff16{$Pos}" ControlMode="New" FieldName="New_x0020_Cell_x0020_Device" __designer:bind="{ddwrt:DataBind('i',concat('ff16',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@New_x0020_Cell_x0020_Device')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff16description{$Pos}" FieldName="New_x0020_Cell_x0020_Device" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Does the Employee Need A Computer?</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff17{$Pos}" ControlMode="New" FieldName="Does_x0020_the_x0020_Employee_x0" __designer:bind="{ddwrt:DataBind('i',concat('ff17',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Does_x0020_the_x0020_Employee_x0')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff17description{$Pos}" FieldName="Does_x0020_the_x0020_Employee_x0" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Computer Hardware</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff18{$Pos}" ControlMode="New" FieldName="Computer_x0020_Hardware" __designer:bind="{ddwrt:DataBind('i',concat('ff18',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Computer_x0020_Hardware')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff18description{$Pos}" FieldName="Computer_x0020_Hardware" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Will the user be using an existing computer?</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff19{$Pos}" ControlMode="New" FieldName="Will_x0020_the_x0020_user_x0020_" __designer:bind="{ddwrt:DataBind('i',concat('ff19',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Will_x0020_the_x0020_user_x0020_')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff19description{$Pos}" FieldName="Will_x0020_the_x0020_user_x0020_" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; height: 73px; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>User of the existing Computer</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody" style="height: 73px">
+							<SharePoint:FormField runat="server" id="ff20{$Pos}" ControlMode="New" FieldName="User_x0020_of_x0020_the_x0020_ex" __designer:bind="{ddwrt:DataBind('i',concat('ff20',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@User_x0020_of_x0020_the_x0020_ex')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff20description{$Pos}" FieldName="User_x0020_of_x0020_the_x0020_ex" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Does the User need access Software?</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff21{$Pos}" ControlMode="New" FieldName="Does_x0020_the_x0020_User_x0020_" __designer:bind="{ddwrt:DataBind('i',concat('ff21',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Does_x0020_the_x0020_User_x0020_')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff21description{$Pos}" FieldName="Does_x0020_the_x0020_User_x0020_" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Software Access Request</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff22{$Pos}" ControlMode="New" FieldName="Software_x0020_Access_x0020_Requ" __designer:bind="{ddwrt:DataBind('i',concat('ff22',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Software_x0020_Access_x0020_Requ')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff22description{$Pos}" FieldName="Software_x0020_Access_x0020_Requ" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Network Folder Access</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff23{$Pos}" ControlMode="New" FieldName="Network_x0020_Folder_x0020_Acces" __designer:bind="{ddwrt:DataBind('i',concat('ff23',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Network_x0020_Folder_x0020_Acces')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff23description{$Pos}" FieldName="Network_x0020_Folder_x0020_Acces" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>HRIS</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff24{$Pos}" ControlMode="New" FieldName="HRIS" __designer:bind="{ddwrt:DataBind('i',concat('ff24',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@HRIS')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff24description{$Pos}" FieldName="HRIS" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>HRIS Locations Needed</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff25{$Pos}" ControlMode="New" FieldName="HRIS_x0020_Locations_x0020_Neede" __designer:bind="{ddwrt:DataBind('i',concat('ff25',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@HRIS_x0020_Locations_x0020_Neede')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff25description{$Pos}" FieldName="HRIS_x0020_Locations_x0020_Neede" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>HRIS Justification</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff26{$Pos}" ControlMode="New" FieldName="HRIS_x0020_Justification" __designer:bind="{ddwrt:DataBind('i',concat('ff26',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@HRIS_x0020_Justification')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff26description{$Pos}" FieldName="HRIS_x0020_Justification" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>HRIS Roles</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff27{$Pos}" ControlMode="New" FieldName="HRIS_x0020_Roles" __designer:bind="{ddwrt:DataBind('i',concat('ff27',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@HRIS_x0020_Roles')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff27description{$Pos}" FieldName="HRIS_x0020_Roles" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Badges</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff28{$Pos}" ControlMode="New" FieldName="Badges" __designer:bind="{ddwrt:DataBind('i',concat('ff28',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Badges')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff28description{$Pos}" FieldName="Badges" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Badge Access Rights</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff29{$Pos}" ControlMode="New" FieldName="Badge_x0020_Access_x0020_Rights" __designer:bind="{ddwrt:DataBind('i',concat('ff29',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Badge_x0020_Access_x0020_Rights')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff29description{$Pos}" FieldName="Badge_x0020_Access_x0020_Rights" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium">
+								<nobr>Comments</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff30{$Pos}" ControlMode="New" FieldName="Comments" __designer:bind="{ddwrt:DataBind('i',concat('ff30',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Comments')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff30description{$Pos}" FieldName="Comments" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader">
+								<nobr><span style="font-size: medium; color: #FF0000"><strong>Completed By</strong></span><span class="ms-formvalidation" style="font-size: medium"><strong> *</strong></span></nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff31{$Pos}" ControlMode="New" FieldName="Completed_x0020_By" __designer:bind="{ddwrt:DataBind('i',concat('ff31',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Completed_x0020_By')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff31description{$Pos}" FieldName="Completed_x0020_By" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium; color: #FF0000">
+								<nobr>Region/Corporate Manager</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff32{$Pos}" ControlMode="New" FieldName="Region_x002f_Corporate_x0020_Man" __designer:bind="{ddwrt:DataBind('i',concat('ff32',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Region_x002f_Corporate_x0020_Man')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff32description{$Pos}" FieldName="Region_x002f_Corporate_x0020_Man" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" class="ms-formlabel" style="font-size: medium; width: 44px;">
+							<H3 class="ms-standardheader" style="font-weight: bold; font-size: medium; color: #FF0000">
+								<nobr>Region VP/Corporate</nobr>
+							</H3>
+						</td>
+						<td width="400px" valign="top" class="ms-formbody">
+							<SharePoint:FormField runat="server" id="ff33{$Pos}" ControlMode="New" FieldName="Region_x0020_VP_x002f_Corporate" __designer:bind="{ddwrt:DataBind('i',concat('ff33',$Pos),'Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Region_x0020_VP_x002f_Corporate')}"/>
+							<SharePoint:FieldDescription runat="server" id="ff33description{$Pos}" FieldName="Region_x0020_VP_x002f_Corporate" ControlMode="New"/>
+						</td>
+					</tr>
+					<tr id="idAttachmentsRow">
+						<td nowrap="true" valign="top" class="ms-formlabel" style="width: 44px">
+							<SharePoint:FieldLabel ControlMode="New" FieldName="Attachments" runat="server"/>
+						</td>
+						<td valign="top" class="ms-formbody" width="80%">
+							<SharePoint:FormField runat="server" id="AttachmentsField" ControlMode="New" FieldName="Attachments" __designer:bind="{ddwrt:DataBind('i','AttachmentsField','Value','ValueChanged','ID',ddwrt:EscapeDelims(string(@ID)),'@Attachments')}"/>
+							<script>
+          var elm = document.getElementById(&quot;idAttachmentsTable&quot;);
+          if (elm == null || elm.rows.length == 0)
+          document.getElementById(&quot;idAttachmentsRow&quot;).style.display=&apos;none&apos;;
+        </script>
+						</td>
+					</tr>
+					<xsl:if test="$dvt_1_automode = '1'" ddwrt:cf_ignore="1">
+						<tr>
+							<td colspan="99" class="ms-vb">
+								<span ddwrt:amkeyfield="ID" ddwrt:amkeyvalue="ddwrt:EscapeDelims(string(@ID))" ddwrt:ammode="view"></span>
+							</td>
+						</tr>
+					</xsl:if>
+				</table>
+			</td>
+		</tr>
+	</xsl:template>
+</xsl:stylesheet>	</Xsl>
+<DataSources>
+<SharePoint:SPDataSource runat="server" DataSourceMode="ListItem" SelectCommand="&lt;View&gt;&lt;Query&gt;&lt;Where&gt;&lt;Eq&gt;&lt;FieldRef Name=&quot;ContentType&quot;/&gt;&lt;Value Type=&quot;Text&quot;&gt;Item&lt;/Value&gt;&lt;/Eq&gt;&lt;/Where&gt;&lt;/Query&gt;&lt;/View&gt;" UseInternalName="True" UseServerDataFormat="True"><SelectParameters><WebPartPages:DataFormParameter ParameterKey="ListItemId" PropertyName="ParameterValues" DefaultValue="0" Name="ListItemId"></WebPartPages:DataFormParameter><WebPartPages:DataFormParameter ParameterKey="weburl" PropertyName="ParameterValues" DefaultValue="http://my.rockwaterenergy.com/teamsites/it" Name="weburl"></WebPartPages:DataFormParameter><WebPartPages:DataFormParameter ParameterKey="ListID" PropertyName="ParameterValues" DefaultValue="{36F78DFE-5990-408D-AF58-06569FA56C08}" Name="ListID"></WebPartPages:DataFormParameter>
+</SelectParameters><UpdateParameters><WebPartPages:DataFormParameter ParameterKey="ListItemId" PropertyName="ParameterValues" DefaultValue="0" Name="ListItemId"></WebPartPages:DataFormParameter><WebPartPages:DataFormParameter ParameterKey="weburl" PropertyName="ParameterValues" DefaultValue="http://my.rockwaterenergy.com/teamsites/it" Name="weburl"></WebPartPages:DataFormParameter><WebPartPages:DataFormParameter ParameterKey="ListID" PropertyName="ParameterValues" DefaultValue="{36F78DFE-5990-408D-AF58-06569FA56C08}" Name="ListID"></WebPartPages:DataFormParameter>
+</UpdateParameters><InsertParameters><WebPartPages:DataFormParameter ParameterKey="ListItemId" PropertyName="ParameterValues" DefaultValue="0" Name="ListItemId"></WebPartPages:DataFormParameter><WebPartPages:DataFormParameter ParameterKey="weburl" PropertyName="ParameterValues" DefaultValue="http://my.rockwaterenergy.com/teamsites/it" Name="weburl"></WebPartPages:DataFormParameter><WebPartPages:DataFormParameter ParameterKey="ListID" PropertyName="ParameterValues" DefaultValue="{36F78DFE-5990-408D-AF58-06569FA56C08}" Name="ListID"></WebPartPages:DataFormParameter>
+</InsertParameters><DeleteParameters><WebPartPages:DataFormParameter ParameterKey="ListItemId" PropertyName="ParameterValues" DefaultValue="0" Name="ListItemId"></WebPartPages:DataFormParameter><WebPartPages:DataFormParameter ParameterKey="weburl" PropertyName="ParameterValues" DefaultValue="http://my.rockwaterenergy.com/teamsites/it" Name="weburl"></WebPartPages:DataFormParameter><WebPartPages:DataFormParameter ParameterKey="ListID" PropertyName="ParameterValues" DefaultValue="{36F78DFE-5990-408D-AF58-06569FA56C08}" Name="ListID"></WebPartPages:DataFormParameter>
+</DeleteParameters>
+</SharePoint:SPDataSource>
+</DataSources>
+</WebPartPages:DataFormWebPart>
+
+</ZoneTemplate></WebPartPages:WebPartZone>
+	 <img src="/_layouts/images/blank.gif" width='590' height='1' alt="" />
+	  </td>
+	 </tr>
+	</table>
+<SharePoint:UIVersionedContent UIVersion="4" runat="server">
+	<ContentTemplate>
+	</div>
+	</ContentTemplate>
+</SharePoint:UIVersionedContent>
+</asp:Content>
+<asp:Content ContentPlaceHolderId="PlaceHolderAdditionalPageHead" runat="server">
+	<SharePoint:UIVersionedContent UIVersion="4" runat="server"><ContentTemplate>
+		<SharePoint:CssRegistration Name="forms.css" runat="server"/>
+	</ContentTemplate></SharePoint:UIVersionedContent>
+</asp:Content>
+<asp:Content ContentPlaceHolderId="PlaceHolderTitleLeftBorder" runat="server">
+<table cellpadding="0" height="100%" width="100%" cellspacing="0">
+ <tr><td class="ms-areaseparatorleft"><img src="/_layouts/images/blank.gif" width='1' height='1' alt="" /></td></tr>
+</table>
+</asp:Content>
+<asp:Content ContentPlaceHolderId="PlaceHolderTitleAreaClass" runat="server">
+<script type="text/javascript" id="onetidPageTitleAreaFrameScript">
+	if (document.getElementById("onetidPageTitleAreaFrame") != null)
+	{
+		document.getElementById("onetidPageTitleAreaFrame").className="ms-areaseparator";
+	}
+</script>
+</asp:Content>
+<asp:Content ContentPlaceHolderId="PlaceHolderBodyAreaClass" runat="server">
+<style type="text/css">
+.ms-bodyareaframe {
+	padding: 8px;
+	border: none;
+}
+</style>
+</asp:Content>
+<asp:Content ContentPlaceHolderId="PlaceHolderBodyLeftBorder" runat="server">
+<div class='ms-areaseparatorleft'><img src="/_layouts/images/blank.gif" width='8' height='100%' alt="" /></div>
+</asp:Content>
+<asp:Content ContentPlaceHolderId="PlaceHolderTitleRightMargin" runat="server">
+<div class='ms-areaseparatorright'><img src="/_layouts/images/blank.gif" width='8' height='100%' alt="" /></div>
+</asp:Content>
+<asp:Content ContentPlaceHolderId="PlaceHolderBodyRightMargin" runat="server">
+<div class='ms-areaseparatorright'><img src="/_layouts/images/blank.gif" width='8' height='100%' alt="" /></div>
+</asp:Content>
+<asp:Content ContentPlaceHolderId="PlaceHolderTitleAreaSeparator" runat="server"/>
